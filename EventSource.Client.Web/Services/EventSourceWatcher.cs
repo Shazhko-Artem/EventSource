@@ -26,13 +26,13 @@ namespace EventSource.Client.Web.Services
         public void Run()
         {
             this.logger.LogInformation("Start watching event source");
-            eventSourceClient.OnReceived += this.HandleEvent;
+            eventSourceClient.OnReceivedMessage += this.HandleEvent;
         }
 
         public void Stop()
         {
             this.logger.LogInformation("Stope watching event source");
-            eventSourceClient.OnReceived -= this.HandleEvent;
+            eventSourceClient.OnReceivedMessage -= this.HandleEvent;
         }
 
         private void HandleEvent(object? sender, EventMessage eventData)

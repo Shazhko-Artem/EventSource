@@ -20,7 +20,7 @@ namespace EventSource.Server.Web
         {
             services.AddSwaggerGen();
             services.AddControllers().AddNewtonsoftJson();
-            services.AddEventSource(options => options.Port = 8002);
+            services.AddEventSource(options => options.ConnectionString = "http://0.0.0.0:8002");
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

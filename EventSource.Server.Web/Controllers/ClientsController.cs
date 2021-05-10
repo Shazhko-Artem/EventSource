@@ -26,7 +26,7 @@ namespace EventSource.Server.Web.Controllers
         [HttpPost("notify")]
         public IActionResult Notify([FromBody] CustomEventMessage<JObject> message)
         {
-            this.sourceServer.Send(message);
+            this.sourceServer.SendToAll(message);
             return this.Ok();
         }
     }

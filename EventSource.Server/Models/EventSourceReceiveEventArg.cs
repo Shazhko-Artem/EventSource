@@ -1,17 +1,16 @@
 ﻿using System;
-using System.Net.Sockets;
 
 namespace EventSource.Server.Models
 {
     public class EventSourceReceiveEventArg<TEventData> : EventArgs
     {
-        public EventSourceReceiveEventArg(Socket client, TEventData eventData)
+        public EventSourceReceiveEventArg(string clientId, TEventData eventData)
         {
-            this.Client = client;
+            this.ClientId = clientId;
             this.EventData = eventData;
         }
 
-        public Socket Client { get; }
+        public string ClientId { get; }
 
         public TEventData EventData { get; }
     }

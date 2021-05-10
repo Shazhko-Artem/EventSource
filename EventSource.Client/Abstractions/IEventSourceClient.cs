@@ -1,13 +1,16 @@
-﻿using EventSource.Common.Models;
+﻿using EventSource.Common.Models.Messages;
 using System;
-using EventSource.Common.Models.Messages;
 
 namespace EventSource.Client.Abstractions
 {
     public interface IEventSourceClient : IDisposable
     {
-        event EventHandler<EventMessage> OnReceived;
+        event EventHandler<EventMessage> OnReceivedMessage;
 
-        void Send(EventMessage data);
+        void Connect();
+
+        void Disconnect();
+
+        void Send(EventMessage message);
     }
 }

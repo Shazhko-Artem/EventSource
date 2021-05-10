@@ -1,11 +1,11 @@
 ﻿using Azure.WebJobs.Extensions.EventSource.Services.Connection;
-using EventSource.Client;
-using EventSource.Client.Options;
-using EventSource.Common.Abstractions;
+using EventSource.Common.Options;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using EventSource.Common;
+using EventSource.Common.Abstractions;
 
 namespace Azure.WebJobs.Extensions.EventSource.Configs
 {
@@ -42,6 +42,7 @@ namespace Azure.WebJobs.Extensions.EventSource.Configs
                     configure(options);
                 });
 
+            builder.Services.AddSingleton<IConnectionEndPointParser, ConnectionEndPointParser>();
             builder.Services.AddSingleton<IEventSourceClientProvider, EventSourceClientProvider>();
 
             return builder;

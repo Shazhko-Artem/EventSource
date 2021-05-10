@@ -1,19 +1,19 @@
-﻿using EventSource.Common.Abstractions;
+﻿using EventSource.Common.Options;
 using EventSource.Server.Abstractions;
-using EventSource.Server.Options;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using EventSource.Common;
+using EventSource.Common.Abstractions;
 
 namespace EventSource.Server.Web.Extensions
 {
     public static class EventSourceServiceRegistrationExtension
     {
-        public static IServiceCollection AddEventSource(this IServiceCollection services, Action<EventSourceConnectionPointOptions> setupOption)
+        public static IServiceCollection AddEventSource(this IServiceCollection services, Action<EventSourceConnectionOptions> setupOption)
         {
-            services.Configure<EventSourceConnectionPointOptions>(setupOption);
-            services.AddSingleton<IEventSourceConnectionPointFactory, EventSourceConnectionPointFactory>();
-            services.AddSingleton<IEventSourceConnection, EventSourceConnection>();
+            services.Configure<EventSourceConnectionOptions>(setupOption);
+            services.AddSingleton<IConnectionEndPointParser, ConnectionEndPointParser>();
             services.AddSingleton<IEventSourceServer, EventSourceServer>();
 
             return services;
@@ -21,9 +21,8 @@ namespace EventSource.Server.Web.Extensions
 
         public static IApplicationBuilder UseEvenSource(this IApplicationBuilder app)
         {
-            var eventSourceConnection = app.ApplicationServices.GetService<IEventSourceConnection>();
-            var sourceServer= app.ApplicationServices.GetService<IEventSourceServer>(); // this is needed to bind the event from the connection to the event source server
-            eventSourceConnection.Open();
+            var sourceServer = app.ApplicationServices.GetService<IEventSourceServer>();
+            sourceServer.Start();
 
             return app;
         }

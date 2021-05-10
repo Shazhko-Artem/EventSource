@@ -11,6 +11,7 @@
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.11" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\repos\microsoft\azure\azure-functions-servicebus-extension\src\Microsoft.Azure.WebJobs.Extensions.ServiceBus\WebJobs.Extensions.ServiceBus.csproj" />
     <ProjectReference Include="..\Azure.WebJobs.Extensions.EventSource\Azure.WebJobs.Extensions.EventSource.csproj" />
   </ItemGroup>
   <ItemGroup>

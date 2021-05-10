@@ -1,7 +1,6 @@
 ﻿using Azure.WebJobs.Extensions.EventSource.Attributes;
 using Azure.WebJobs.Extensions.EventSource.Configs;
 using Azure.WebJobs.Extensions.EventSource.Services.Connection;
-using EventSource.Client.Options;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Azure.WebJobs.Host.Triggers;
@@ -9,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Reflection;
 using System.Threading.Tasks;
+using EventSource.Common.Options;
 
 namespace Azure.WebJobs.Extensions.EventSource.Triggers
 {

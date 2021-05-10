@@ -7,8 +7,8 @@ using Azure.WebJobs.Extensions.EventSource.Configs;
 using Azure.WebJobs.Extensions.EventSource.Services.Connection;
 using EventSource.Client.Abstractions;
 using EventSource.Client.Functions.Services;
-using EventSource.Client.Options;
 using EventSource.Common.Models.Messages;
+using EventSource.Common.Options;
 using Microsoft.Extensions.Options;
 
 [assembly: FunctionsStartup(typeof(Startup))]

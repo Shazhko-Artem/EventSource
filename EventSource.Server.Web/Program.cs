@@ -16,7 +16,8 @@ namespace EventSource.Server.Web
                 .ConfigureLogging((hostingContext, builder) =>
                 {
                     builder.ClearProviders();
-                    builder.AddFile("C:\\Logs\\{Date}.log");
+                    builder.AddConsole();
+                    builder.AddFile("C:\\Logs\\{Date}.log", LogLevel.Debug, outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj} {NewLine}{Exception}");
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

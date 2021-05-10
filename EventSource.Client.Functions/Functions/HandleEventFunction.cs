@@ -26,48 +26,48 @@ namespace EventSource.Client.Functions.Functions
         public void HandleCreatedUserEventFunction(
             [EventSourceTrigger(ConfigurationSectionNames.EventSource.EventNames.CreatedUser, ConfigurationSectionNames.EventSource.Connection)] string message, ILogger log)
         {
-            log.LogInformation($"C# ServiceBus queue trigger function processed message: {message}");
+            log.LogInformation($"C# EventSource trigger function processed message: {message}");
             this.store.Add(new StringEventMessage(ConfigurationSectionNames.EventSource.EventNames.CreatedUser, message));
         }
 
-        [FunctionName("HandleUpdatedUserEventFunction")]
-        public void HandleUpdatedUserEventFunction(
-            [EventSourceTrigger(ConfigurationSectionNames.EventSource.EventNames.UpdatedUser, ConfigurationSectionNames.EventSource.Connection)] User message, ILogger log)
-        {
-            log.LogInformation($"C# ServiceBus queue trigger function processed message: {message.UserName}");
-            this.store.Add(new CustomEventMessage<User>(ConfigurationSectionNames.EventSource.EventNames.UpdatedUser, message));
-        }
+        //[FunctionName("HandleUpdatedUserEventFunction")]
+        //public void HandleUpdatedUserEventFunction(
+        //    [EventSourceTrigger(ConfigurationSectionNames.EventSource.EventNames.UpdatedUser, ConfigurationSectionNames.EventSource.Connection)] User message, ILogger log)
+        //{
+        //    log.LogInformation($"C#  EventSource trigger function processed message: {message.UserName}");
+        //    this.store.Add(new CustomEventMessage<User>(ConfigurationSectionNames.EventSource.EventNames.UpdatedUser, message));
+        //}
 
-        [FunctionName("HandleDeletedUserEventFunction")]
-        public void HandleDeletedUserEventFunction(
-            [EventSourceTrigger("DeletedUser", ConfigurationSectionNames.EventSource.Connection)]CustomEventMessage<User> message, ILogger log)
-        {
-            log.LogInformation($"C# ServiceBus queue trigger function processed message: {message.Content.UserName}");
-            this.store.Add(message);
-        }
+        //[FunctionName("HandleDeletedUserEventFunction")]
+        //public void HandleDeletedUserEventFunction(
+        //    [EventSourceTrigger("DeletedUser", ConfigurationSectionNames.EventSource.Connection)] CustomEventMessage<User> message, ILogger log)
+        //{
+        //    log.LogInformation($"C#  EventSource trigger function processed message: {message.Content.UserName}");
+        //    this.store.Add(message);
+        //}
 
-        [FunctionName("HandleCreatingUserErrorEventFunction")]
-        public void HandleCreatingUserErrorEventFunction(
-            [EventSourceTrigger("CreatingUserError", ConfigurationSectionNames.EventSource.Connection)] EventMessage message, ILogger log)
-        {
-            log.LogInformation($"C# ServiceBus queue trigger function processed message: {message.Name}");
-            this.store.Add(message);
-        }
+        //[FunctionName("HandleCreatingUserErrorEventFunction")]
+        //public void HandleCreatingUserErrorEventFunction(
+        //    [EventSourceTrigger("CreatingUserError", ConfigurationSectionNames.EventSource.Connection)] EventMessage message, ILogger log)
+        //{
+        //    log.LogInformation($"C#  EventSource trigger function processed message: {message.Name}");
+        //    this.store.Add(message);
+        //}
 
-        [FunctionName("HandleUpdatingUserErrorEventFunction")]
-        public void HandleUpdatingUserErrorEventFunction(
-            [EventSourceTrigger("UpdatingUserError", ConfigurationSectionNames.EventSource.Connection)] StringEventMessage message, ILogger log)
-        {
-            log.LogInformation($"C# ServiceBus queue trigger function processed message: {message.Name}");
-            this.store.Add(message);
-        }
+        //[FunctionName("HandleUpdatingUserErrorEventFunction")]
+        //public void HandleUpdatingUserErrorEventFunction(
+        //    [EventSourceTrigger("UpdatingUserError", ConfigurationSectionNames.EventSource.Connection)] StringEventMessage message, ILogger log)
+        //{
+        //    log.LogInformation($"C#  EventSource trigger function processed message: {message.Name}");
+        //    this.store.Add(message);
+        //}
 
-        [FunctionName("HandleDeletingUserErrorEventFunction")]
-        public void HandleDeletingUserErrorEventFunction(
-            [EventSourceTrigger("DeletingUserError", ConfigurationSectionNames.EventSource.Connection)] BytesEventMessage message, ILogger log)
-        {
-            log.LogInformation($"C# ServiceBus queue trigger function processed message: {message.Name}");
-            this.store.Add(message);
-        }
+        //[FunctionName("HandleDeletingUserErrorEventFunction")]
+        //public void HandleDeletingUserErrorEventFunction(
+        //    [EventSourceTrigger("DeletingUserError", ConfigurationSectionNames.EventSource.Connection)] BytesEventMessage message, ILogger log)
+        //{
+        //    log.LogInformation($"C#  EventSource trigger function processed message: {message.Name}");
+        //    this.store.Add(message);
+        //}
     }
 }

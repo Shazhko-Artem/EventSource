@@ -35,7 +35,7 @@ namespace Azure.WebJobs.Extensions.EventSource.Triggers
                 throw new InvalidOperationException("The listener has already been started.");
             }
 
-            this.client.OnReceived += this.ProcessMessageAsync;
+            this.client.OnReceivedMessage += this.ProcessMessageAsync;
             this.started = true;
 
             return Task.CompletedTask;
@@ -50,7 +50,7 @@ namespace Azure.WebJobs.Extensions.EventSource.Triggers
                 throw new InvalidOperationException("The listener has not yet been started or has already been stopped");
             }
 
-            this.client.OnReceived -= this.ProcessMessageAsync;
+            this.client.OnReceivedMessage -= this.ProcessMessageAsync;
             this.started = false;
 
             return Task.CompletedTask;

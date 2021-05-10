@@ -24,7 +24,7 @@ namespace EventSource.Client.Web
             services.Add(new ServiceDescriptor(typeof(IStore<>), typeof(Store<>), ServiceLifetime.Singleton));
 
             services.AddEventSourceHandlers();
-            services.AddEventSourceClient(options => options.ConnectionString = "http://40.117.147.211:8002");
+            services.AddEventSourceClient(options => options.ConnectionString = "http://52.249.248.94:8002");
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

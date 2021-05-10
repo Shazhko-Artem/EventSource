@@ -3,17 +3,25 @@ using EventSource.Client;
 using EventSource.Client.Abstractions;
 using Microsoft.Extensions.Logging;
 using System.Collections.Concurrent;
+using EventSource.Common;
+using EventSource.Common.Abstractions;
+using EventSource.Common.Options;
+using Microsoft.Extensions.Options;
 
 namespace Azure.WebJobs.Extensions.EventSource.Services.Connection
 {
     public class EventSourceClientProvider : IEventSourceClientProvider
     {
         private readonly ILoggerFactory loggerFactory;
+        private readonly IConnectionEndPointParser connectionEndPointParser;
         private readonly ConcurrentDictionary<string, IEventSourceClient> clientCache = new ConcurrentDictionary<string, IEventSourceClient>();
 
-        public EventSourceClientProvider(ILoggerFactory loggerFactory)
+        public EventSourceClientProvider(
+            ILoggerFactory loggerFactory,
+            IConnectionEndPointParser connectionEndPointParser)
         {
             this.loggerFactory = loggerFactory;
+            this.connectionEndPointParser = connectionEndPointParser;
         }
 
         public IEventSourceClient GetClient(EventSourceAccount account)
@@ -24,14 +32,11 @@ namespace Azure.WebJobs.Extensions.EventSource.Services.Connection
 
         private IEventSourceClient CreateClient(string connectionString)
         {
-            var factoryLogger = this.loggerFactory.CreateLogger<EventSourceConnectionPointFactory>();
-            var connectionPointFactory = new EventSourceConnectionPointFactory(connectionString, factoryLogger);
-
-            var connectionLogger = this.loggerFactory.CreateLogger<EventSourceConnection>();
-            var connection = new EventSourceConnection(connectionPointFactory, connectionLogger);
-
-            connection.Open();
-            var client = new EventSourceClient(connection);
+            var clientLogger = this.loggerFactory.CreateLogger<EventSourceClient>();
+            var options = new EventSourceConnectionOptions { ConnectionString = connectionString };
+            var optionsWrapper = new OptionsWrapper<EventSourceConnectionOptions>(options);
+            var client = new EventSourceClient(optionsWrapper, this.connectionEndPointParser, clientLogger);
+            client.Connect();
             return client;
         }
     }

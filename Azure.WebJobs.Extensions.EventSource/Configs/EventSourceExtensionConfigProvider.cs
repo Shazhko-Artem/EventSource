@@ -4,7 +4,6 @@ using Azure.WebJobs.Extensions.EventSource.Converters;
 using Azure.WebJobs.Extensions.EventSource.Services.Connection;
 using Azure.WebJobs.Extensions.EventSource.Triggers;
 using EventSource.Client.Abstractions;
-using EventSource.Client.Options;
 using EventSource.Common.Models;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Description;
@@ -14,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using System;
 using EventSource.Common.Models.Messages;
+using EventSource.Common.Options;
 using Microsoft.Azure.WebJobs.Host;
 
 namespace Azure.WebJobs.Extensions.EventSource.Configs

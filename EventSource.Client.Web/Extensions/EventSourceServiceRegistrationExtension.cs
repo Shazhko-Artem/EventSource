@@ -1,13 +1,12 @@
 ﻿using EventSource.Client.Abstractions;
-using EventSource.Client.Options;
 using EventSource.Client.Web.Services;
-using EventSource.Common.Abstractions;
+using EventSource.Client.Web.Services.Handlers;
+using EventSource.Common.Options;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using EventSource.Client.Web.Services.Handlers;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using EventSource.Common;
+using EventSource.Common.Abstractions;
 
 namespace EventSource.Client.Web.Extensions
 {
@@ -16,13 +15,7 @@ namespace EventSource.Client.Web.Extensions
         public static IServiceCollection AddEventSourceClient(this IServiceCollection services, Action<EventSourceConnectionOptions> setupOption)
         {
             services.Configure<EventSourceConnectionOptions>(setupOption);
-            services.AddSingleton<IEventSourceConnectionPointFactory>(provider =>
-            {
-                var options = provider.GetService<IOptions<EventSourceConnectionOptions>>();
-                var logger = provider.GetService<ILogger<EventSourceConnectionPointFactory>>();
-                return new EventSourceConnectionPointFactory(options.Value.ConnectionString, logger);
-            });
-            services.AddSingleton<IEventSourceConnection, EventSourceConnection>();
+            services.AddSingleton<IConnectionEndPointParser, ConnectionEndPointParser>();
             services.AddSingleton<IEventSourceClient, EventSourceClient>();
 
             return services;
@@ -38,8 +31,8 @@ namespace EventSource.Client.Web.Extensions
 
         public static IApplicationBuilder UseEvenSourceClient(this IApplicationBuilder app)
         {
-            var eventSourceConnection = app.ApplicationServices.GetService<IEventSourceConnection>();
-            eventSourceConnection.Open();
+            var eventSourceConnection = app.ApplicationServices.GetService<IEventSourceClient>();
+            eventSourceConnection.Connect();
 
             return app;
         }

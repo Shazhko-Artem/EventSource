@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Globalization;
-using EventSource.Client.Options;
+using EventSource.Common.Options;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Logging;
 using Microsoft.Extensions.Configuration;

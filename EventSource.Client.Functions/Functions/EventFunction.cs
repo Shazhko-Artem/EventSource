@@ -29,13 +29,13 @@ namespace EventSource.Client.Functions.Functions
             return new OkObjectResult(this.store.GetAll());
         }
 
-        [FunctionName("Event")]
-        public async Task<IActionResult> Send(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post")] CustomEventMessage<JObject> message,
-            [EventSource(ConfigurationSectionNames.EventSource.EventNames.CreatedUser, ConfigurationSectionNames.EventSource.Connection)] IAsyncCollector<EventMessage> eventSource)
-        {
-            await eventSource.AddAsync(message);
-            return new OkResult();
-        }
+        //[FunctionName("Event")]
+        //public async Task<IActionResult> Send(
+        //    [HttpTrigger(AuthorizationLevel.Anonymous, "post")] CustomEventMessage<JObject> message,
+        //    [EventSource(ConfigurationSectionNames.EventSource.EventNames.CreatedUser, ConfigurationSectionNames.EventSource.Connection)] IAsyncCollector<EventMessage> eventSource)
+        //{
+        //    await eventSource.AddAsync(message);
+        //    return new OkResult();
+        //}
     }
 }

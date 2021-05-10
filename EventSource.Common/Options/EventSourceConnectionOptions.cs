@@ -1,4 +1,4 @@
-﻿namespace EventSource.Client.Options
+﻿namespace EventSource.Common.Options
 {
     public class  EventSourceConnectionOptions
     {
