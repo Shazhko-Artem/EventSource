@@ -1,15 +1,14 @@
-﻿using EventSource.Client.Functions;
+﻿using Azure.WebJobs.Extensions.EventSource.Configs;
+using Azure.WebJobs.Extensions.EventSource.Services.Connection;
+using EventSource.Client.Abstractions;
+using EventSource.Client.Functions;
+using EventSource.Client.Functions.Services;
+using EventSource.Common.Options;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
-using Azure.WebJobs.Extensions.EventSource.Configs;
-using Azure.WebJobs.Extensions.EventSource.Services.Connection;
-using EventSource.Client.Abstractions;
-using EventSource.Client.Functions.Services;
-using EventSource.Common.Models.Messages;
-using EventSource.Common.Options;
 using Microsoft.Extensions.Options;
+using System.Reflection;
 
 [assembly: FunctionsStartup(typeof(Startup))]
 namespace EventSource.Client.Functions
@@ -18,14 +17,10 @@ namespace EventSource.Client.Functions
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            var configuration = new ConfigurationBuilder()
-                .AddEnvironmentVariables()
-                .AddUserSecrets(Assembly.GetExecutingAssembly(), optional: true)
-                .Build();
-
             var services = builder.Services;
+            services.AddOptions<EventSourceConnectionOptions>()
+                .Configure<IConfiguration>((options, configuration) => configuration.GetSection("EventSource").Bind(options));
 
-            services.Configure<EventSourceConnectionOptions>(configuration.GetSection("EventSource"));
             services.AddSingleton<IEventSourceClient>(provider =>
             {
                 var clientProvider = provider.GetRequiredService<IEventSourceClientProvider>();
@@ -35,8 +30,12 @@ namespace EventSource.Client.Functions
             });
 
             services.AddSingleton<IScopeInvestigator, ScopeInvestigator>();
-            services.AddSingleton<IConfiguration>(configuration);
             services.AddSingleton(typeof(IStore<>), typeof(Store<>));
+        }
+
+        public override void ConfigureAppConfiguration(IFunctionsConfigurationBuilder builder)
+        {
+            builder.ConfigurationBuilder.AddUserSecrets(Assembly.GetExecutingAssembly(), optional: true);
         }
     }
 }
