@@ -10,7 +10,7 @@
 
             public static class EventNames
             {
-                public const string CreatedUser = "%" + EventSource.Name + ":CreatedUser%";
+                public const string CreatedUser = "CreatedUser";
                 public const string UpdatedUser = "UpdatedUser";
             }
         }
