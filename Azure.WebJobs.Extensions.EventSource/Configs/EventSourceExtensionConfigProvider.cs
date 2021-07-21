@@ -4,17 +4,16 @@ using Azure.WebJobs.Extensions.EventSource.Converters;
 using Azure.WebJobs.Extensions.EventSource.Services.Connection;
 using Azure.WebJobs.Extensions.EventSource.Triggers;
 using EventSource.Client.Abstractions;
-using EventSource.Common.Models;
+using EventSource.Common.Models.Messages;
+using EventSource.Common.Options;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Description;
+using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Azure.WebJobs.Host.Bindings;
 using Microsoft.Azure.WebJobs.Host.Config;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using System;
-using EventSource.Common.Models.Messages;
-using EventSource.Common.Options;
-using Microsoft.Azure.WebJobs.Host;
 
 namespace Azure.WebJobs.Extensions.EventSource.Configs
 {
