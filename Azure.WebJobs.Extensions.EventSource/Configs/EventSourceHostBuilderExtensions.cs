@@ -36,7 +36,7 @@ namespace Azure.WebJobs.Extensions.EventSource.Configs
                     options.ConnectionString = config.GetConnectionString(Constants.DefaultConnectionStringName) ??
                                                config[Constants.DefaultConnectionSettingStringName];
 
-                    IConfigurationSection section = config.GetSection(path);
+                    IConfigurationSection section = config.GetSection(path); // path == AzureFunctionsJobHost:extensions:{ExtensionName}
                     section.Bind(options);
 
                     configure(options);
