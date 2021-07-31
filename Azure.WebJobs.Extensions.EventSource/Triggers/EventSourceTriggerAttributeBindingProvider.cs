@@ -48,7 +48,7 @@ namespace Azure.WebJobs.Extensions.EventSource.Triggers
 
             var account = new EventSourceAccount(this.options, this.configuration, attribute);
             return Task.FromResult<ITriggerBinding>(
-                new EventSourceTriggerAttributeBinding(clientProvider, account, attribute, nameResolver));
+                new EventSourceTriggerAttributeBinding(this.clientProvider, account, attribute, this.nameResolver));
         }
     }
 }
