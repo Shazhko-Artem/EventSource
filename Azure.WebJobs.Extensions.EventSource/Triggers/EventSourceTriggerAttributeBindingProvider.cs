@@ -1,6 +1,6 @@
 ﻿using Azure.WebJobs.Extensions.EventSource.Attributes;
-using Azure.WebJobs.Extensions.EventSource.Configs;
 using Azure.WebJobs.Extensions.EventSource.Services.Connection;
+using EventSource.Common.Options;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Azure.WebJobs.Host.Triggers;
@@ -8,7 +8,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Reflection;
 using System.Threading.Tasks;
-using EventSource.Common.Options;
+using Azure.WebJobs.Extensions.EventSource.Configs;
 
 namespace Azure.WebJobs.Extensions.EventSource.Triggers
 {
@@ -47,10 +47,8 @@ namespace Azure.WebJobs.Extensions.EventSource.Triggers
             }
 
             var account = new EventSourceAccount(this.options, this.configuration, attribute);
-            var client = this.clientProvider.GetClient(account);
-
-            var eventName = this.nameResolver.ResolveWholeString(attribute.EventName);
-            return Task.FromResult<ITriggerBinding>(new EventSourceTriggerAttributeBinding(client, eventName));
+            return Task.FromResult<ITriggerBinding>(
+                new EventSourceTriggerAttributeBinding(clientProvider, account, attribute, nameResolver));
         }
     }
 }

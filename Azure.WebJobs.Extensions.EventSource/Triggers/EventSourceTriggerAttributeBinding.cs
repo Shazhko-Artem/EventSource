@@ -1,25 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using EventSource.Client.Abstractions;
-using EventSource.Common.Models;
+﻿using Azure.WebJobs.Extensions.EventSource.Attributes;
+using Azure.WebJobs.Extensions.EventSource.Configs;
+using Azure.WebJobs.Extensions.EventSource.Services.Connection;
 using EventSource.Common.Models.Messages;
+using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Azure.WebJobs.Host.Bindings;
 using Microsoft.Azure.WebJobs.Host.Listeners;
 using Microsoft.Azure.WebJobs.Host.Protocols;
 using Microsoft.Azure.WebJobs.Host.Triggers;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Azure.WebJobs.Extensions.EventSource.Triggers
 {
     internal class EventSourceTriggerAttributeBinding : ITriggerBinding
     {
-        private readonly IEventSourceClient client;
-        private readonly string eventName;
+        private readonly IEventSourceClientProvider clientProvider;
+        private readonly INameResolver nameResolver;
+        private readonly EventSourceAccount account;
+        private readonly EventSourceTriggerAttribute attribute;
 
-        public EventSourceTriggerAttributeBinding(IEventSourceClient client, string eventName)
+        public EventSourceTriggerAttributeBinding(
+            IEventSourceClientProvider clientProvider,
+            EventSourceAccount account,
+            EventSourceTriggerAttribute attribute,
+            INameResolver nameResolver)
         {
-            this.client = client;
-            this.eventName = eventName;
+            this.clientProvider = clientProvider;
+            this.nameResolver = nameResolver;
+            this.account = account;
+            this.attribute = attribute;
             this.BindingDataContract = this.CreateBindingDataContract();
         }
 
@@ -40,7 +51,9 @@ namespace Azure.WebJobs.Extensions.EventSource.Triggers
                 throw new ArgumentNullException(nameof(context));
             }
 
-            return Task.FromResult<IListener>(new TriggerEventListener(context.Executor, this.client, this.eventName));
+            var client = this.clientProvider.GetClient(this.account);
+            var eventName = this.nameResolver.ResolveWholeString(attribute.EventName);
+            return Task.FromResult<IListener>(new TriggerEventListener(context.Executor, client, eventName));
         }
 
         public ParameterDescriptor ToParameterDescriptor()
