@@ -4,6 +4,7 @@ using EventSource.Common.Models.Messages;
 using Microsoft.Extensions.Logging;
 using SimpleTcp;
 using System;
+using System.Threading.Tasks;
 using EventSource.Common.Abstractions;
 using EventSource.Common.Options;
 using Microsoft.Extensions.Options;
@@ -44,7 +45,7 @@ namespace EventSource.Client
             this.tcpClient.ConnectWithRetries(timeoutMs: 5000);
             this.logger.LogDebug($"[Connect] End executing method.");
         }
-        
+
         public void Disconnect()
         {
             this.logger.LogDebug($"[Disconnect] Start executing method.");
@@ -79,16 +80,25 @@ namespace EventSource.Client
         protected virtual void OnReceived(object sender, DataReceivedEventArgs e)
         {
             this.logger.LogDebug("[OnReceived] Start executing method.");
-            this.logger.LogDebug($"[OnReceived] Deserialize bytes into '{nameof(EventMessage)}' model.");
-            var message = EventMessageConvertor.Deserialize<BytesEventMessage>(e.Data);
-            this.logger.LogDebug($"[OnReceived] Invoke subscriber methods to handle received '{message.Name}' message.");
-            this.OnReceivedMessage?.Invoke(this, message);
+            Task.Run(() =>
+            {
+                this.logger.LogDebug($"[OnReceived] Deserialize bytes into '{nameof(EventMessage)}' model.");
+                var message = EventMessageConvertor.Deserialize<BytesEventMessage>(e.Data);
+                this.logger.LogDebug($"[OnReceived] Async invoke subscriber methods to handle received '{message.Name}' message.");
+                this.OnReceivedMessage?.Invoke(this, message);
+                this.logger.LogDebug("[OnReceived] Finished async invoke executing subscribers.");
+            });
+
             this.logger.LogDebug("[OnReceived] End executing method.");
         }
 
         protected void OnDisconnected(object sender, ClientDisconnectedEventArgs e)
         {
             this.logger.LogDebug($"[OnDisconnected] Disconnected from the server. Client: '{e.IpPort}'");
+            if (e.Reason == DisconnectReason.Kicked) return;
+            this.logger.LogDebug($"[OnDisconnected] Try reconnect to the server. Client: '{e.IpPort}'");
+            this.tcpClient.ConnectWithRetries(timeoutMs: 5000);
+            this.logger.LogDebug($"[OnDisconnected] Reconnected to the server. Client: '{e.IpPort}'");
         }
 
         protected void OnConnected(object sender, ClientConnectedEventArgs e)

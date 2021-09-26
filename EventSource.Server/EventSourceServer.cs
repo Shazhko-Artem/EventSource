@@ -1,16 +1,15 @@
-﻿using EventSource.Common.Convertors;
+﻿using EventSource.Common.Abstractions;
+using EventSource.Common.Convertors;
 using EventSource.Common.Models.Messages;
+using EventSource.Common.Options;
 using EventSource.Server.Abstractions;
 using EventSource.Server.Models;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using SimpleTcp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using EventSource.Common.Abstractions;
-using EventSource.Common.Options;
-using Microsoft.Extensions.Options;
 
 namespace EventSource.Server
 {
@@ -91,7 +90,7 @@ namespace EventSource.Server
             this.logger.LogDebug($"[SendTo] Start executing method.");
             this.logger.LogDebug($"[SendTo] Serialize '{message.Name}' message into bytes.");
             var bytes = EventMessageConvertor.Serialize(message);
-            this.tcpServer.Send(clientId, bytes);
+            this.tcpServer.SendAsync(clientId, bytes);
             this.logger.LogDebug($"[SendTo] End executing method.");
         }
 
@@ -154,7 +153,7 @@ namespace EventSource.Server
             foreach (var clientId in clientIds)
             {
                 this.logger.LogDebug($"[Send] Send message to the '{clientId}' client.");
-                this.tcpServer.Send(clientId, data);
+                this.tcpServer.SendAsync(clientId, data);
             }
         }
     }
