@@ -138,14 +138,14 @@ namespace EventSource.Server
             this.logger.LogDebug("[OnReceived] End executing method.");
         }
 
-        protected void OnClientConnected(object sender, ClientConnectedEventArgs e)
+        protected void OnClientConnected(object sender, ConnectionEventArgs args)
         {
-            this.logger.LogInformation($"[OnClientConnected] New client connected. Client '{e.IpPort}'");
+            this.logger.LogInformation($"[OnClientConnected] New client connected. Client '{args.IpPort}'");
         }
 
-        protected void OnClientDisconnected(object sender, ClientDisconnectedEventArgs e)
+        protected void OnClientDisconnected(object sender, ConnectionEventArgs args)
         {
-            this.logger.LogInformation($"[OnClientDisconnected] Client disconnected. Client: '{e.IpPort}', Reason: {e.Reason.ToString()}");
+            this.logger.LogInformation($"[OnClientDisconnected] Client disconnected. Client: '{args.IpPort}', Reason: {args.Reason.ToString()}");
         }
         
         private void Send(byte[] data, IEnumerable<string> clientIds)

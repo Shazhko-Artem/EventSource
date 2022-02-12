@@ -31,7 +31,7 @@ namespace EventSource.Client.Web.Extensions
 
         public static IApplicationBuilder UseEvenSourceClient(this IApplicationBuilder app)
         {
-            var eventSourceConnection = app.ApplicationServices.GetService<IEventSourceClient>();
+            var eventSourceConnection = app.ApplicationServices.GetRequiredService<IEventSourceClient>();
             eventSourceConnection.Connect();
 
             return app;
@@ -39,7 +39,7 @@ namespace EventSource.Client.Web.Extensions
 
         public static IApplicationBuilder UseEventSourceHandlers(this IApplicationBuilder app)
         {
-            var eventSourceWatcher = app.ApplicationServices.GetService<IEventSourceWatcher>();
+            var eventSourceWatcher = app.ApplicationServices.GetRequiredService<IEventSourceWatcher>();
             eventSourceWatcher.Run();
 
             return app;

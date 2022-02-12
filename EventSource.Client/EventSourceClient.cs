@@ -92,18 +92,18 @@ namespace EventSource.Client
             this.logger.LogDebug("[OnReceived] End executing method.");
         }
 
-        protected void OnDisconnected(object sender, ClientDisconnectedEventArgs e)
+        protected void OnDisconnected(object sender, ConnectionEventArgs args)
         {
-            this.logger.LogDebug($"[OnDisconnected] Disconnected from the server. Client: '{e.IpPort}'");
-            if (e.Reason == DisconnectReason.Kicked) return;
-            this.logger.LogDebug($"[OnDisconnected] Try reconnect to the server. Client: '{e.IpPort}'");
+            this.logger.LogDebug($"[OnDisconnected] Disconnected from the server. Client: '{args.IpPort}'");
+            if (args.Reason == DisconnectReason.Kicked) return;
+            this.logger.LogDebug($"[OnDisconnected] Try reconnect to the server. Client: '{args.IpPort}'");
             this.tcpClient.ConnectWithRetries(timeoutMs: 5000);
-            this.logger.LogDebug($"[OnDisconnected] Reconnected to the server. Client: '{e.IpPort}'");
+            this.logger.LogDebug($"[OnDisconnected] Reconnected to the server. Client: '{args.IpPort}'");
         }
 
-        protected void OnConnected(object sender, ClientConnectedEventArgs e)
+        protected void OnConnected(object sender, ConnectionEventArgs args)
         {
-            this.logger.LogDebug($"[OnConnected] Connected to the server. Client: '{e.IpPort}'");
+            this.logger.LogDebug($"[OnConnected] Connected to the server. Client: '{args.IpPort}'");
         }
     }
 }

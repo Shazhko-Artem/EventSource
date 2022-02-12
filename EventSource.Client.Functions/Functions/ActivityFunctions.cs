@@ -3,13 +3,14 @@ using EventSource.Client.Functions.Constants;
 using EventSource.Client.Functions.Models;
 using Microsoft.Azure.WebJobs;
 using System;
+using System.Threading.Tasks;
 
 namespace EventSource.Client.Functions.Functions
 {
     public class ActivityFunctions
     {
         [FunctionName(nameof(GenerateReport))]
-        public async void GenerateReport(
+        public async Task GenerateReport(
             [EventSourceTrigger("newActivity", ConfigurationSectionNames.EventSource.Connection)] Activity activity,
             [EventSource(eventName: "newReport", ConfigurationSectionNames.EventSource.Connection)] IAsyncCollector<Report> reportCollector)
         {
