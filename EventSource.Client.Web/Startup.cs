@@ -20,6 +20,7 @@ namespace EventSource.Client.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers().AddNewtonsoftJson();
+            services.AddSwaggerGen();
 
             services.Add(new ServiceDescriptor(typeof(IStore<>), typeof(Store<>), ServiceLifetime.Singleton));
 
@@ -33,7 +34,13 @@ namespace EventSource.Client.Web
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "EventSource V1");
+            });
+            
             app.UseEvenSourceClient();
             app.UseEventSourceHandlers();
 
